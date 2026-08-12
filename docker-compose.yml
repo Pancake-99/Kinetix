@@ -1,0 +1,56 @@
+services:
+  client:
+    build:
+      context: ./src/client
+      dockerfile: Dockerfile
+    container_name: kinetix-client
+    ports:
+      - "${CLIENT_PORT:-5173}:5173"
+    environment:
+      VITE_API_URL: http://localhost:${SERVER_PORT:-3000}
+    volumes:
+      - ./src/client:/app
+      - /app/node_modules
+    depends_on:
+      - server
+    restart: unless-stopped
+
+  server:
+    build:
+      context: ./src/server
+      dockerfile: Dockerfile
+    container_name: kinetix-server
+    ports:
+      - "${SERVER_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      DATABASE_URL: postgres://${DB_USER:-kinetix}:${DB_PASSWORD:-kinetix}@db:5432/${DB_NAME:-kinetix}
+    volumes:
+      - ./src/server:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: kinetix-db
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER:-kinetix}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-kinetix}
+      POSTGRES_DB: ${DB_NAME:-kinetix}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./modelos/esquemas_db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-kinetix} -d ${DB_NAME:-kinetix}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pgdata:
