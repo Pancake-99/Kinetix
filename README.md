@@ -12,10 +12,15 @@ kinetix-workspace/
 ├── docs/                      # Documentación institucional y gestión
 │   ├── actas/                 # Acta de constitución, minutas de reunión
 │   ├── normativas/            # Checklists ISO (25010, 9001, 27001)
-│   └── manuales/              # Guías de despliegue y estilo de código
+│   ├── manuales/              # Guías de despliegue y estilo de código
+│   ├── entrevistas/           # Entrevistas a stakeholders
+│   ├── srs/                   # Especificación de requisitos de software
+│   ├── trazabilidad/          # Matrices de trazabilidad de requisitos
+│   └── arquitectura/          # Decisiones y vistas de arquitectura
 ├── modelos/                   # Diseño arquitectónico y datos
 │   ├── diagramas_uml/         # Casos de uso, clases, actividades
-│   └── esquemas_db/           # Modelado relacional y scripts de migración
+│   ├── esquemas_db/           # Modelado relacional y scripts de migración
+│   └── c4/                    # Diagramas de arquitectura (modelo C4)
 ├── src/                       # Código fuente
 │   ├── client/                # Frontend (componentes, vistas, assets)
 │   └── server/                # Backend (lógica de negocio, controladores, rutas)
